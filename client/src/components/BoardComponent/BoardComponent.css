@@ -1,0 +1,28 @@
+.board-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+  height: 100vh;
+}
+
+.board-wrapper__mainboard {
+  width: 400px;
+  height: 400px;
+}
+
+.board-wrapper__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.bard-wrapper__pgns {
+  max-width: 400px;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+}
