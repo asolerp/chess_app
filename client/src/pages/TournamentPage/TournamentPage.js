@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {ChessBoard} from "react-fen-chess-board";
 import socketIOClient from "socket.io-client";
 
-import './BoardComponent.css'
+import './TournamentPage.css'
 
 // UI
 import { PgnComponent } from '../PgnComponent/PgnComponent'
 
-export const BoardComponent = () => {
+export const TournamentPage = () => {
     
-  const ENDPOINT = "http://127.0.0.1:4003";
+  const ENDPOINT = "/";
 
   const [ tournament, setTournament ] = useState()
   const [ positions, setPositions ] = useState(undefined)

@@ -1,0 +1,40 @@
+version: "3"
+
+## TODO add auth to mongo
+## TODO work out production architecture (add nginx proxy)
+## TODO work out testing?
+
+services:
+  ##########################
+  ### SETUP SERVER CONTAINER
+  ##########################
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    ports:
+      - 4003:4003
+    volumes:
+      # Map client src to server src to hot reload
+      - ./server/src:/app/server/src
+    command: nodemon -L index.js
+    env_file: ./server/.env
+
+    restart: always
+  ##########################
+  ### SETUP CLIENT CONTAINER
+  ##########################
+  client:
+    stdin_open: true
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    # links:
+    #   - server
+    # command: npm run start
+    restart: always
