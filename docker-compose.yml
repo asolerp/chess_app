@@ -32,8 +32,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./client/src:/app/src
-      - ./client/public:/app/public
+      - ./client/src:/app/client/src
+      - ./client/public:/app/client/public
     # links:
     #   - server
     # command: npm run start

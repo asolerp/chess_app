@@ -5,7 +5,7 @@ import socketIOClient from "socket.io-client";
 import './TournamentPage.css'
 
 // UI
-import { PgnComponent } from '../PgnComponent/PgnComponent'
+import { PgnComponent } from '../../components/PgnComponent/PgnComponent'
 
 export const TournamentPage = () => {
     
