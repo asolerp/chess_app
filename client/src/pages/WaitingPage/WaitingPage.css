@@ -1,0 +1,17 @@
+.mainpage-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/img/chess.jpg');
+  background-size:cover ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainpage-wrapper h1 {
+  width: 60%;
+  text-align: center;
+  color: white;
+  font-size: 4rem;
+  text-shadow: 2px 2px black;
+}

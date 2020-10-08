@@ -1,15 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {ChessBoard} from "react-fen-chess-board";
 import socketIOClient from "socket.io-client";
+
+import {
+  useHistory,
+} from "react-router-dom";
 
 import './TournamentPage.css'
 
 // UI
 import { PgnComponent } from '../../components/PgnComponent/PgnComponent'
 
+import { store } from '../../state/store'
+
 export const TournamentPage = () => {
     
   const ENDPOINT = "/";
+
+  const globalState = useContext(store)
+  const history = useHistory()
+
+  const { state } = globalState
 
   const [ tournament, setTournament ] = useState()
   const [ positions, setPositions ] = useState(undefined)
@@ -26,12 +37,13 @@ export const TournamentPage = () => {
   const initialPosition = ['rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']
 
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("get_data", data => {
-      console.log("Llegan datos!", data)
-      setTournament(data)
-    });
-  }, []);
+    console.log(state)
+    if (!state) {
+      history.push('/')
+    } else {
+      setTournament(state.tournament)
+    }
+  },[])
 
   useEffect(() => {
     const positions = tournament && tournament.map((game, i) => (0))

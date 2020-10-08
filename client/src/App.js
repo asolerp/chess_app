@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+
+import { StateProvider } from './state/store'
 
 import {
   BrowserRouter as Router,
@@ -11,21 +13,28 @@ import {
 import { TournamentPage } from './pages/TournamentPage/TournamentPage'
 import { WaitingPage } from './pages/WaitingPage/WaitingPage'
 
+
+
 function App() {
+
+  
   return (
-    <Router>
-      <div className="App">
+    <StateProvider>
+      <Router>
+        <div className="App">
         <Switch>
-          <Route path="/">
+          <Route exact path="/">
             <WaitingPage />
           </Route>
-          <Router path="/partidas">
+          <Route path="/partidas">
             <TournamentPage />
-          </Router>
+          </Route>
         </Switch>
-      </div>
-    </Router>
+        </div>
+      </Router>
+    </StateProvider>
   );
 }
 
+export const Context = React.createContext()
 export default App;
