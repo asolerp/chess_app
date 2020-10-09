@@ -15,10 +15,14 @@ import { store } from '../../state/store'
 
 export const TournamentPage = () => {
     
-  const ENDPOINT = "/";
 
   const globalState = useContext(store)
+
   const history = useHistory()
+
+  useEffect(() => {
+    console.log("Global", globalState)
+  },[globalState])
 
   const { state } = globalState
 
@@ -46,39 +50,41 @@ export const TournamentPage = () => {
   },[])
 
   useEffect(() => {
-    const positions = tournament && tournament.map((game, i) => (0))
+    const positions = globalState.state && globalState.state.tournament.map((game, i) => (0))
     setPositions(positions)
-  },[tournament])
+  },[globalState])
 
   useEffect(() => {
-    const lives = tournament && tournament.map((game, i) => ( true))
+    const lives = globalState.state && globalState.state.tournament.map((game, i) => ( true))
     setLive(lives)
-  },[tournament])
+  },[globalState])
 
   useEffect(() => {
-    let jugadas = tournament && tournament.map((game, i) => (game.match[game.match.length - 1]))
+    let jugadas = globalState.state && globalState.state.tournament.map((game, i) => (game.match[game.match.length - 1]))
     setJugadas(jugadas)
-  },[tournament])
+  },[globalState])
 
   useEffect(() => {
-    let pgns = tournament && tournament.map((game, i) => ([...game.pgns]))
+    let pgns = globalState.state && globalState.state.tournament.map((game, i) => ([...game.pgns]))
     setPgns(pgns)
-  },[tournament])
+  },[globalState])
 
   useEffect(() => {
     console.log("partidas")
-    let partidas = tournament && tournament.map((game, i) => ([...initialPosition,...game.match]))
+    let partidas = globalState.state && globalState.state.tournament.map((game, i) => ([...initialPosition,...game.match]))
     setPartidas(partidas)
-  },[tournament])
+  },[globalState])
 
   useEffect(() => {
-    let newPositions = positions && [...positions]
-    live && live.forEach((l, i) => {
-      if (l) {
-        newPositions[i] = partidas[i].length - 1
-      }
-    })
-    setPositions(newPositions)
+    if (partidas) {
+      let newPositions = positions && [...positions]
+      live && live.forEach((l, i) => {
+        if (l) {
+          newPositions[i] = partidas[i].length - 1
+        }
+      })
+      setPositions(newPositions)
+    }
   }, [partidas, live])
 
   const next = (index) => {

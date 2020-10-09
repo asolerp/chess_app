@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect }from 'react';
 import './App.css';
 
-import { StateProvider } from './state/store'
+import socketIOClient from "socket.io-client";
 
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
@@ -13,26 +12,42 @@ import {
 import { TournamentPage } from './pages/TournamentPage/TournamentPage'
 import { WaitingPage } from './pages/WaitingPage/WaitingPage'
 
+import {
+  useHistory
+} from "react-router-dom";
 
+import {store} from './state/store'
+
+const ENDPOINT = "/";
 
 function App() {
 
+  const state = useContext(store)
+  const { dispatch } = state
+  const history = useHistory()
+
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("get_data", data => {
+      console.log("Partidas", data)
+      dispatch({ type: "ADD_TOURNAMENT", payload: data })
+      if (window.location.pathname === '/') {
+        history.push('/partidas')
+      }
+    });
+  }, []);
   
   return (
-    <StateProvider>
-      <Router>
-        <div className="App">
-        <Switch>
-          <Route exact path="/">
-            <WaitingPage />
-          </Route>
-          <Route path="/partidas">
-            <TournamentPage />
-          </Route>
-        </Switch>
-        </div>
-      </Router>
-    </StateProvider>
+    <div className="App">
+      <Switch>
+        <Route exact path="/">
+          <WaitingPage />
+        </Route>
+        <Route path="/partidas">
+          <TournamentPage />
+        </Route>
+      </Switch>
+    </div>
   );
 }
 

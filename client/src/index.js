@@ -4,9 +4,19 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import { StateProvider } from './state/store'
+
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+        <StateProvider>
+          <Router>
+            <App />
+          </Router>
+        </StateProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
