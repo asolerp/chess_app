@@ -51,54 +51,57 @@ module.exports = function(config) {
                                 } else if (baseObjList[fileObj.filename].status == "uploading") {
                                     if (fileObj.attrs.size == baseObjList[fileObj.filename].attrs.size) {
 
-                                        let sourceFile = sftp.createReadStream(config.path + '/' + fileObj.filename)
-
-                                        sourceFile.on('data', (data) => {
-
-                                            let tournament = []                                   
-
-                                            let games = data.toString().split('[Event')
-
-                                            splitGames = games.map(game => '[Event' + game)
-
-                                            splitGames.shift()
-                                     
-                                            splitGames.forEach(game => {
-
-                                                let chess1 = new Chess
-                                                let chess2 = new Chess
-                                                let chess3 = new Chess 
-
-                                                let fens = []
-                                                let pgns = []
-
-                                                let pgn = game                 
-
-                                                chess1.load_pgn(pgn)
+                                        if (baseObjList[fileObj.filename].filename === 'games.pgn') {
+                                        
+                                            let sourceFile = sftp.createReadStream(config.path + '/' + fileObj.filename)
     
-                                                fens = chess1.history().map(move => {                                
-                                                  chess2.move(move)                                    
-                                                  return chess2.fen()
-                                                })
+                                            sourceFile.on('data', (data) => {
     
-                                                pgns = chess1.history().map(move => {
-                                                  chess3.move(move)
-                                                  return chess3.pgn()
-                                                })
-                                                
-                                                tournament.push({
-                                                    headers: chess1.header(),
-                                                    pgns: pgns,
-                                                    match: fens
-                                                })
-
-                                            })                
-                                                      
-                                            delete fileObj.status;
-                                            event.emit("upload", {                                
-                                                tournament: tournament
-                                            });
-                                        })
+                                                let tournament = []                                   
+    
+                                                let games = data.toString().split('[Event')
+    
+                                                splitGames = games.map(game => '[Event' + game)
+    
+                                                splitGames.shift()
+                                         
+                                                splitGames.forEach(game => {
+    
+                                                    let chess1 = new Chess
+                                                    let chess2 = new Chess
+                                                    let chess3 = new Chess 
+    
+                                                    let fens = []
+                                                    let pgns = []
+    
+                                                    let pgn = game                 
+    
+                                                    chess1.load_pgn(pgn)
+        
+                                                    fens = chess1.history().map(move => {                                
+                                                      chess2.move(move)                                    
+                                                      return chess2.fen()
+                                                    })
+        
+                                                    pgns = chess1.history().map(move => {
+                                                      chess3.move(move)
+                                                      return chess3.pgn()
+                                                    })
+                                                    
+                                                    tournament.push({
+                                                        headers: chess1.header(),
+                                                        pgns: pgns,
+                                                        match: fens
+                                                    })
+    
+                                                })                
+                                                          
+                                                delete fileObj.status;
+                                                event.emit("upload", {                                
+                                                    tournament: tournament
+                                                });
+                                            })
+                                        }
 
                                     }
                                 }
