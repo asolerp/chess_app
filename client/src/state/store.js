@@ -1,19 +1,9 @@
-// store.js
-import React, {createContext, useReducer} from 'react';
+import { createStore } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+
+// REDUCERS
 import { reducer } from './reducer'
 
-const initialState = {
-  status: false,
-  tournament: undefined
-};
+const store = createStore(reducer, composeWithDevTools())
 
-const store = createContext(initialState);
-const { Provider } = store;
-
-const StateProvider = ( { children } ) => {
-  const [state, dispatch] = useReducer(reducer);
-
-  return <Provider value={{ state, dispatch }}>{children}</Provider>;
-};
-
-export { store, StateProvider }
+export default store

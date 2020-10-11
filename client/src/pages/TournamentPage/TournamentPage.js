@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {ChessBoard} from "react-fen-chess-board";
-import socketIOClient from "socket.io-client";
+import { connect } from 'react-redux'
+
 
 import {
   useHistory,
@@ -11,22 +12,10 @@ import './TournamentPage.css'
 // UI
 import { PgnComponent } from '../../components/PgnComponent/PgnComponent'
 
-import { store } from '../../state/store'
-
-export const TournamentPage = () => {
+const TournamentPage = ({tournament}) => {
     
-
-  const globalState = useContext(store)
-
   const history = useHistory()
 
-  useEffect(() => {
-    console.log("Global", globalState)
-  },[globalState])
-
-  const { state } = globalState
-
-  const [ tournament, setTournament ] = useState()
   const [ positions, setPositions ] = useState(undefined)
   const [ partidas, setPartidas ] = useState(undefined)
   const [ jugadas, setJugadas ] = useState(undefined)
@@ -41,39 +30,36 @@ export const TournamentPage = () => {
   const initialPosition = ['rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']
 
   useEffect(() => {
-    console.log(state)
-    if (!state) {
+    if (!tournament) {
       history.push('/')
-    } else {
-      setTournament(state.tournament)
-    }
+    } 
   },[])
 
   useEffect(() => {
-    const positions = globalState.state && globalState.state.tournament.map((game, i) => (0))
+    const positions = tournament.map((game, i) => (0))
     setPositions(positions)
-  },[globalState])
+  },[tournament])
 
   useEffect(() => {
-    const lives = globalState.state && globalState.state.tournament.map((game, i) => ( true))
+    const lives = tournament.map((game, i) => ( true))
     setLive(lives)
-  },[globalState])
+  },[tournament])
 
   useEffect(() => {
-    let jugadas = globalState.state && globalState.state.tournament.map((game, i) => (game.match[game.match.length - 1]))
+    let jugadas = tournament.map((game, i) => (game.match[game.match.length - 1]))
     setJugadas(jugadas)
-  },[globalState])
+  },[tournament])
 
   useEffect(() => {
-    let pgns = globalState.state && globalState.state.tournament.map((game, i) => ([...game.pgns]))
+    let pgns = tournament.map((game, i) => ([...game.pgns]))
     setPgns(pgns)
-  },[globalState])
+  },[tournament])
 
   useEffect(() => {
     console.log("partidas")
-    let partidas = globalState.state && globalState.state.tournament.map((game, i) => ([...initialPosition,...game.match]))
+    let partidas = tournament.map((game, i) => ([...initialPosition,...game.match]))
     setPartidas(partidas)
-  },[globalState])
+  },[tournament])
 
   useEffect(() => {
     if (partidas) {
@@ -168,3 +154,18 @@ export const TournamentPage = () => {
     </React.Fragment>
   )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    tournament: state.tournament
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {}
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TournamentPage)

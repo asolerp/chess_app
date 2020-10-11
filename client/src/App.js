@@ -1,5 +1,6 @@
-import React, { useContext, useEffect }from 'react';
+import React, { useEffect }from 'react';
 import './App.css';
+import { connect } from 'react-redux'
 
 import socketIOClient from "socket.io-client";
 
@@ -9,28 +10,24 @@ import {
 } from "react-router-dom";
 
 // PAGES
-import { TournamentPage } from './pages/TournamentPage/TournamentPage'
+import TournamentPage from './pages/TournamentPage/TournamentPage'
 import { WaitingPage } from './pages/WaitingPage/WaitingPage'
 
 import {
   useHistory
 } from "react-router-dom";
 
-import {store} from './state/store'
 
 const ENDPOINT = "/";
 
-function App() {
+function App({ addTournament }) {
 
-  const state = useContext(store)
-  const { dispatch } = state
   const history = useHistory()
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("get_data", data => {
-      console.log("Partidas", data)
-      dispatch({ type: "ADD_TOURNAMENT", payload: data })
+      addTournament(data)
       if (window.location.pathname === '/') {
         history.push('/partidas')
       }
@@ -51,5 +48,18 @@ function App() {
   );
 }
 
-export const Context = React.createContext()
-export default App;
+
+const mapStateToProps = (state) => {
+  return {}
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTournament: (data) => dispatch({ type: "ADD_TOURNAMENT", payload: data })
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)

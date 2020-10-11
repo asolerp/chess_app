@@ -1,7 +1,12 @@
 export const STATUS_CHANGED = "STATUS_CHANGED";
 export const ADD_TOURNAMENT = "ADD_TOURNAMENT";
 
-export const reducer = (state, action) => {
+const initialState = {
+  status: 'live',
+  tournament: []
+}
+
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case STATUS_CHANGED:
       return {
