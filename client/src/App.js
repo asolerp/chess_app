@@ -25,9 +25,18 @@ function App({ addTournament }) {
   const history = useHistory()
 
   useEffect(() => {
+    const tournament = localStorage.getItem('tournament')
+    if (tournament) {
+      addTournament(JSON.parse(tournament))
+      history.push('/partidas')
+    }
+  },[])
+
+  useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
     socket.on("get_data", data => {
       addTournament(data)
+      localStorage.setItem('tournament', JSON.stringify(data))
       if (window.location.pathname === '/') {
         history.push('/partidas')
       }
