@@ -36,6 +36,7 @@ function App({ addTournament }) {
     const socket = socketIOClient(ENDPOINT);
     socket.on("get_data", data => {
       addTournament(data)
+      console.log(data)
       localStorage.setItem('tournament', JSON.stringify(data))
       if (window.location.pathname === '/') {
         history.push('/partidas')

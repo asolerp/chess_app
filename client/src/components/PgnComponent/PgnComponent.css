@@ -1,7 +1,13 @@
 .yellow {
-  background: yellow;
+  background:  #96673f;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
 }
 
 span {
   padding: 5px;
+  color:  #96673f;
+  font-weight: bold;
+  cursor: pointer;
 }

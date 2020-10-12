@@ -24,6 +24,7 @@ const TournamentPage = ({tournament}) => {
   const history = useHistory()
 
   const [ positions, setPositions ] = useState(undefined)
+  const [ offLinePosition, setOffLinePosition ] = useState(undefined)
   const [ partidas, setPartidas ] = useState(undefined)
   const [ live, setLive ] = useState(undefined)
   const [ pgns, setPgns ] = useState(undefined)
@@ -49,7 +50,7 @@ const TournamentPage = ({tournament}) => {
   useEffect(() => {
     let lives = JSON.parse(localStorage.getItem('tournament')).map((game, i) => (true))
     setLive(lives)
-  },[])
+  },[tournament])
 
   useEffect(() => {
     let pgns = tournament.map((game, i) => ([...game.pgns]))
@@ -69,7 +70,6 @@ const TournamentPage = ({tournament}) => {
           newPositions[i] = partidas[i].length - 1
         }
       })
-      console.log(newPositions)
       setPositions(newPositions)
     }
   }, [partidas, live])
@@ -128,8 +128,12 @@ const TournamentPage = ({tournament}) => {
       <div className="board-wrapper">
         {
           partidas && partidas.map((game, i) => (
-            <div style={{display: 'flex', flexDirection: 'column', padding: '10px'}}>
-              <div style={{display: 'flex', padding: '10px'}} key={`game-${i}`}>
+            <div key={i} style={{display: 'flex', flexDirection: 'column', padding: '10px'}}>
+              <div className={"board-header"} style={{display: 'flex'}}>
+                <h1 className={"board-header__player"}>{tournament[i].headers.White}</h1>
+                <span>|</span><h1 className={"board-header__player"}>{tournament[i].headers.Black}</h1>
+              </div>
+              <div className={"board"} key={`game-${i}`}>
                 <div className="board-wrapper__mainboard">
                   <ChessBoard 
                     fen={live && live[i] ? partidas && partidas[i][partidas[i].length - 1] : partidas[i][positions[i]]}
@@ -151,11 +155,11 @@ const TournamentPage = ({tournament}) => {
                 </div>
               </div>
               <div className="board-wrapper__actions">
-                <MdSkipPrevious size={35} onClick={() => first(i)} disabled={partidas && partidas[i].length === 1} />
-                <MdKeyboardArrowLeft size={35} onClick={() => back(i)} disabled={partidas && partidas[i].length === 1} />
-                <MdPlayArrow size={35} onClick={() => setLiveHandler(i)} />
-                <MdKeyboardArrowRight size={35} onClick={() => next(i)} disabled={partidas && partidas[i].length === 1} />
-                <MdSkipNext size={35} onClick={() => setLiveHandler(i)} />
+                <MdSkipPrevious size={35} className={"icon-action"} onClick={() => first(i)} disabled={partidas && partidas[i].length === 1} />
+                <MdKeyboardArrowLeft size={35} className={"icon-action"} onClick={() => back(i)} disabled={partidas && partidas[i].length === 1} />
+                <MdPlayArrow size={35} className={"icon-action"} onClick={() => setLiveHandler(i)} />
+                <MdKeyboardArrowRight size={35} className={"icon-action"} onClick={() => next(i)} disabled={partidas && partidas[i].length === 1} />
+                <MdSkipNext size={35} className={"icon-action"} onClick={() => setLiveHandler(i)} />
               </div>
             </div>
           ))
