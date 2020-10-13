@@ -24,7 +24,6 @@ io.on("connection", (socket) => {
 });
 
 event.con.on("upload", function (data) {
-  console.log(data)
   const updatedTournament = data.tournament.map((game, i) => ({
     ...game, pgns: game.pgns.map((pgn, x) => {
       return pgn.replace(data.tournament[i].pgns[x - 1], '').trim()

@@ -5,7 +5,7 @@ export const PgnComponent = ({pos, active, pgn, onClick}) => {
   return (
     <span 
     onClick={onClick} 
-    className={active ? 'yellow' : ''}
+    className={active ? 'active' : ''}
     >{pgn.trim() + ' '}
   </span>
   )

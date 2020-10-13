@@ -1,13 +1,12 @@
-.yellow {
-  background:  #96673f;
-  border-radius: 10px;
+.active {
   color: white;
+  background-color: #469C98;
   font-weight: bold;
 }
 
 span {
   padding: 5px;
-  color:  #96673f;
-  font-weight: bold;
+  color:  white;
+  font-weight: 500;
   cursor: pointer;
 }
