@@ -1,24 +1,51 @@
 .board-wrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  width: 68vw;
-  height: 100vh;
 }
 
 .boards-wrapper {
   padding: 20px;
   width: 32vw;
-  height: 100vh;
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
 }
 
-.selected {
-  transition: all;
-  border: 5px solid #469C98;
-  border-radius: 5px;
-  background: white;
+.boards-info {
+  background-color: white ;
+  border: 2px solid #469C98;
+  border-radius: 0 0 10px 10px;
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 55px;
+  cursor: pointer;
+}
+
+.boards-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #469c98 ;
+}
+
+
+.info {
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  background-color: #469c9855 ;
+}
+
+.selected {
+  transition: all .2s;
+  background: #469C98;
+}
+
+.selected p {
+  transition: all .2s;
+  color: white;
 }

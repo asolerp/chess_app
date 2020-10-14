@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 
-import {ChessBoard} from "react-fen-chess-board";
+import { Row, Col } from 'react-bootstrap'
+import Select from 'react-select'
+
 
 
 import {
@@ -15,6 +17,9 @@ const TournamentPage = ({tournament}) => {
 
   const history = useHistory()
   const [boardSelected, setBoardSelected] = useState(0)
+  const [ options, setOptions ] = useState()
+  const [ optionSelected, setOptionSelected ] = useState(0)
+  // const [ showInfo, setShowInfo ] = useState([])
 
   const brownBoardTheme = {
     darkSquare: "#b58863",
@@ -27,28 +32,59 @@ const TournamentPage = ({tournament}) => {
     } 
   },[])
 
+  useEffect(() => {
+    const options = tournament.map((game, i) => ({ value: i, label: `${game.headers.White} | ${game.headers.Black}` }))
+    setOptions(options)
+  }, [tournament])
+
+  // const handleShow = (index, status) => {
+  //   const shows = [...showInfo]
+  //   shows[index] = status
+  //   setShowInfo(shows)
+  // }
+
   return (
     <React.Fragment>
-      <div style={{display:'flex'}}>
-        <div className="board-wrapper">
-          <MainBoardComponent board={tournament[boardSelected]} />
-        </div>
-        <div className="boards-wrapper">
+      <Row className="p-0 mt-3 mb-3">
+        <Col xl={{span: 4, offset: 4 }}>
+          {
+            options && (
+              <Select 
+                defaultValue={options[0]}
+                onChange={(e) => setOptionSelected(e.value)}
+                options={options} 
+              />
+            )
+          }
+        </Col>
+      </Row>    
+      <Row style={{display:'flex'}} className="p-0">
+        <Col xl={{span: 8, offset: 2 }} className="board-wrapper p-0">
+          <MainBoardComponent board={tournament[optionSelected]} />
+        </Col>
+        {/* <Col xl="12" className="boards-wrapper p-0 pt-2" style={{justifyContent: 'center'}}>
           {
             tournament && tournament.map((game, i) => (
-              <div
-                onClick={() => setBoardSelected(i)}
-                className={boardSelected === i ? 'selected' : ''} 
-                style={{ width: '250px', height: '250px', margin: '5px'}}>
-                <ChessBoard 
-                  fen={game.match[game.match.length - 1]}
-                  boardTheme={brownBoardTheme}
-                />
+              <div                  
+                key={`board-${i}`}
+                style={{position: 'relative', width: '250px', height: '250px', margin: '5px'}}>
+                <div
+                  onClick={() => setBoardSelected(i)}   
+                  style={{ width: '100%', height: '100%'}}>
+                  <ChessBoard 
+                    fen={game.match[game.match.length - 1]}
+                    boardTheme={brownBoardTheme}
+                  />
+                  <div 
+                    className={`boards-info ${boardSelected === i ? 'selected' : ''}`}>
+                      <p>{game.headers.White} | {game.headers.Black}</p>
+                  </div>
+                </div>
               </div>
             ))
           }
-        </div>
-      </div>
+        </Col> */}
+      </Row>
     </React.Fragment>
   )
 }

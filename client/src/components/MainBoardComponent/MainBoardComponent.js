@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {ChessBoard} from "react-fen-chess-board";
+import { Row, Col } from 'react-bootstrap'
+
 import './MainBoardComponent.css'
 
 // UI
@@ -15,9 +17,7 @@ import { MdKeyboardArrowRight } from 'react-icons/md'
 
 
 export const MainBoardComponent = ({board}) => {
-
-  console.log(board)
-
+  
   const initialPosition = ['rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']
 
   const brownBoardTheme = {
@@ -60,7 +60,7 @@ export const MainBoardComponent = ({board}) => {
 
   const next = () => {
     setLive(false)
-    if (position < (board.match.length - 1)) {
+    if (position < (board.match.length)) {
       setPosition(position + 1)
     }
   }
@@ -79,41 +79,43 @@ export const MainBoardComponent = ({board}) => {
 
   const setLiveHandler = (index) => {
     setLive(true)
-    setPosition(board.match.length - 1)
+    setPosition(board.match.length)
   }
 
   return (
     <React.Fragment>
       {
         board && (
-          <div style={{display: 'flex', flexDirection: 'column', padding: '10px'}}>
-            <div className={"board"}>
-              <div className="board-wrapper__mainboard">
-                <ChessBoard 
-                  fen={live ? board.match[board.match.length - 1] : partida[position]}
-                  boardTheme={brownBoardTheme}
-                />
-              </div>
-              <div>
-                <InfoPlayerComponent board={board}/>
-                <div className="bard-wrapper__pgns">
-                  <PgnTableComponent
-                  board={0}
-                  onClick={(pos) => goToPosition(pos + 1)}
-                  active={position - 1}
-                  pgns={board.pgns} 
+          <Row className="main-board p-2">
+            <Col xl={7} className="pr-0 justify-content-xl-center">
+              <div className={"board"}>
+                <div className="board-wrapper__mainboard">
+                  <ChessBoard 
+                    fen={live ? board.match[board.match.length - 1] : partida[position]}
+                    boardTheme={brownBoardTheme}
                   />
                 </div>
+                <div className="board-wrapper__actions">
+                  <MdSkipPrevious size={30} className={"icon-action"} onClick={() => first()} disabled={partida && partida.length === 1} />
+                  <MdKeyboardArrowLeft size={30} className={"icon-action"} onClick={() => back()} disabled={partida && partida.length === 1} />
+                  <MdPlayArrow size={30} className={"icon-action"} onClick={() => setLiveHandler()} />
+                  <MdKeyboardArrowRight size={30} className={"icon-action"} onClick={() => next()} disabled={partida && partida.length === 1} />
+                  <MdSkipNext size={30} className={"icon-action"} onClick={() => setLiveHandler()} />
+                </div>
               </div>
-            </div>
-            <div className="board-wrapper__actions">
-              <MdSkipPrevious size={35} className={"icon-action"} onClick={() => first()} disabled={partida && partida.length === 1} />
-              <MdKeyboardArrowLeft size={35} className={"icon-action"} onClick={() => back()} disabled={partida && partida.length === 1} />
-              <MdPlayArrow size={35} className={"icon-action"} onClick={() => setLiveHandler()} />
-              <MdKeyboardArrowRight size={35} className={"icon-action"} onClick={() => next()} disabled={partida && partida.length === 1} />
-              <MdSkipNext size={35} className={"icon-action"} onClick={() => setLiveHandler()} />
-            </div>
-          </div>
+            </Col>
+            <Col xl={5} style={{height: '82vh'}}>
+              <InfoPlayerComponent board={board}/>
+              <div className="bard-wrapper__pgns">
+                <PgnTableComponent
+                board={0}
+                onClick={(pos) => goToPosition(pos + 1)}
+                active={position - 1}
+                pgns={board.pgns} 
+                />
+              </div>
+            </Col>
+          </Row>
         )
       }
     </React.Fragment>

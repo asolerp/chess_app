@@ -2,6 +2,8 @@ import React, { useEffect }from 'react';
 import './App.css';
 import { connect } from 'react-redux'
 
+import { Navbar } from 'react-bootstrap'
+
 import socketIOClient from "socket.io-client";
 
 import {
@@ -46,6 +48,9 @@ function App({ addTournament }) {
   
   return (
     <div className="App">
+      <Navbar bg="light">
+        <Navbar.Brand href="#home">Torneo de Balears</Navbar.Brand>
+      </Navbar>
       <Switch>
         <Route exact path="/">
           <WaitingPage />
